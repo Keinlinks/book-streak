@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, type OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
-import '@fontsource/audiowide';
 import { StateService } from '../../services/state.service';
 import { ItemCardComponent } from '../../shared/components/item-card/item-card.component';
 import { Book } from '../../../models/book';

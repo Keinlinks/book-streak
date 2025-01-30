@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import '@fontsource-variable/public-sans';
 import { StateService } from './services/state.service';
 import { State } from '../models/state';
 
