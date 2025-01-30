@@ -1,0 +1,37 @@
+<section class="w-full pt-2 px-2 text-white">
+  <div class="flex justify-around gap-4 bg-gradient-to-r from-blue-600 to-black p-4 rounded-2xl">
+    <div class="h-28 w-24 rounded-2xl bg-gray-300">
+
+    </div>
+    <div class="flex flex-col items-center">
+      <h2 class="font-['Audiowide'] text-2xl">{{ stateService.getStreak() | async }}</h2>
+      <p>Streak</p>
+    </div>
+    <div class="flex flex-col justify-between">
+
+      <button (click)="haveReadToday()" [severity]="haveBeenReadToday ? 'success' : 'danger'" [disabled]="haveBeenReadToday"
+        pButton class="transition-all duration-300 ease-in-out"
+        [icon]="haveBeenReadToday ? 'pi pi-check-circle' : 'pi pi-check'"></button>
+
+        <button routerLink="/config" [severity]="'secondary'" pButton [icon]="'pi pi-cog'"></button>
+    </div>
+  </div>
+
+  <ul class="mt-4 ">
+    @for(book of books; track book.title){
+      <li class="my-2">
+        <book-streak-item-card
+        [item]="book"
+        [styles]="{background: 'linear-gradient(90deg, rgba(29,18,213,1) 0%, rgba(19,19,119,1) 51%, rgba(0,212,255,0.1024860627844888) 100%)'}"
+        />
+      </li>
+    }
+  </ul>
+  <nav class="sticky bottom-0 bg-black rounded-md bg-opacity-80 pt-1 w-full">
+    <ul class="flex justify-center items-center gap-4 p-4">
+      <li>
+        <button pButton icon="pi pi-plus" severity="info" label="Agregar libro" [routerLink]="['/add-book']"></button>
+      </li>
+    </ul>
+  </nav>
+</section>

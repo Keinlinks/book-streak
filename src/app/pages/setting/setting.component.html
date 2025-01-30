@@ -1,0 +1,14 @@
+<section class="p-2 flex flex-col items-center justify-between h-full">
+  <button pButton label="Editar streak" type="button" (click)="editStreakDialogVisible = true"></button>
+  <button pButton icon="pi pi-arrow-left" label="Volver" type="button" severity="secondary"
+   routerLink="/"></button>
+</section>
+
+
+<p-dialog header="editar el streak actual" [(visible)]="editStreakDialogVisible" [modal]="true" [style]="{width: '300px'}">
+  <input class="w-full" id="streak" pInputText #streakInput value="{{stateService.getStreak() | async}}" />
+  <div class="flex justify-center">
+    <button class="mt-4" pButton label="Aceptar" severity="danger" type="button"
+      (click)="editStreak(+streakInput.value); editStreakDialogVisible = false"></button>
+  </div>
+</p-dialog>
