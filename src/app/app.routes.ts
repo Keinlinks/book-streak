@@ -7,19 +7,20 @@ export const routes: Routes = [
       import('./pages/home/home.component').then((m) => m.HomeComponent),
   },
   {
-    path: 'add-book/:id',
-    loadComponent: () =>
-      import('./pages/add-book-form/add-book-form.component').then(
-        (m) => m.AddBookFormComponent
-      ),
-  },
-  {
     path: 'add-book',
     loadComponent: () =>
       import('./pages/add-book-form/add-book-form.component').then(
         (m) => m.AddBookFormComponent
       ),
   },
+  {
+    path: 'add-book/:id',
+    loadComponent: () =>
+      import('./pages/add-book-form/add-book-form.component').then(
+        (m) => m.AddBookFormComponent
+      ),
+  },
+
   {
     path: 'config',
     loadComponent: () =>

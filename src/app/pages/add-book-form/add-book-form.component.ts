@@ -48,7 +48,7 @@ export class AddBookFormComponent implements OnInit {
     image: new FormControl<string>(''),
     rating: new FormControl<number>(0),
     progress: new FormControl<number>(0),
-    totalPage: new FormControl<number>(0),
+    totalPage: new FormControl<number>(1),
   });
   errorMessage: string = '';
   ngOnInit(): void {

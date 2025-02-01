@@ -48,7 +48,10 @@ export class StateService {
       const index = books.findIndex(b => b.id === book.id);
       books[index] = book;
     }
-    else books.push(book);
+    else {
+      book.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      books.push(book);
+    }
 
     this.$books.next(books);
     this.verifyAuthors();
@@ -56,7 +59,7 @@ export class StateService {
   }
 
   loadBooks(books: Book[]){
-    let isBooksWithId = books.every(book => book.id !== undefined);
+    let isBooksWithId = books.every(book => book.id !== undefined && book.id !== "");
     if (!isBooksWithId){
       books = books.map(book => {
         return {
