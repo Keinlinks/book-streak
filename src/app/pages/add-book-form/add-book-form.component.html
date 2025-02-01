@@ -43,7 +43,7 @@
           (click)="router.navigate(['/'])"></button>
       </li>
       <li>
-        <button pButton [disabled]="errorMessage || !formGroup.valid" icon="pi pi-plus" severity="info" label="Agregar" type="submit"></button>
+        <button pButton [disabled]="errorMessage || !formGroup.valid" icon="pi pi-plus" severity="info" [label]="!formGroup.value['id'] ? 'Agregar': 'Editar'" type="submit"></button>
       </li>
 
     </ul>
@@ -54,6 +54,6 @@
 <p-dialog header="Agregar autor" [(visible)]="authorDialogVisible" [modal]="true" [style]="{width: '300px'}">
     <input class="w-full" id="addAuthor" pInputText #authorInput />
     <div class="flex justify-center">
-      <button class="mt-4" pButton label="Agregar" type="button" (click)="addAuthor(authorInput.value); authorInput.value = '';"></button>
+      <button class="mt-4" pButton [label]="'Agregar'" type="button" (click)="addAuthor(authorInput.value); authorInput.value = '';"></button>
     </div>
 </p-dialog>

@@ -10,7 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumber } from 'primeng/inputnumber';
 import { RatingModule } from 'primeng/rating';
 import { Book } from 'src/models/book';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 
 
@@ -36,11 +36,13 @@ import { DialogModule } from 'primeng/dialog';
 export class AddBookFormComponent implements OnInit {
   stateService = inject(StateService);
   router = inject(Router);
+  route = inject(ActivatedRoute);
 
   authors: string[] = [];
   authorDialogVisible = false;
 
   formGroup: FormGroup<any> = new FormGroup({
+    id: new FormControl<string>(''),
     author: new FormControl<string>('', Validators.required),
     title: new FormControl<string>('', Validators.required),
     image: new FormControl<string>(''),
@@ -50,6 +52,8 @@ export class AddBookFormComponent implements OnInit {
   });
   errorMessage: string = '';
   ngOnInit(): void {
+    if (this.route.snapshot.params['id']) this.loadBook(this.route.snapshot.params['id']);
+
     this.stateService.getAuthors().subscribe((authors) => {
       this.authors = Array.from(authors);
     });
@@ -61,8 +65,15 @@ export class AddBookFormComponent implements OnInit {
     });
   }
 
+  loadBook(id:string){
+    let book = this.stateService.getBookById(id);
+    if (!book) return;
+    this.formGroup.patchValue(book);
+  }
+
   submit() {
     let book = this.formGroup.value as Book;
+
     this.stateService.addNewBook(book);
     this.router.navigate(['/']);
   }

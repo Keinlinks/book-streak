@@ -44,15 +44,33 @@ export class StateService {
   }
   addNewBook(book: Book){
     const books = this.$books.value;
-    books.push(book);
+    if (book.id){
+      const index = books.findIndex(b => b.id === book.id);
+      books[index] = book;
+    }
+    else books.push(book);
+
     this.$books.next(books);
     this.verifyAuthors();
     this.saveState();
   }
 
   loadBooks(books: Book[]){
+    let isBooksWithId = books.every(book => book.id !== undefined);
+    if (!isBooksWithId){
+      books = books.map(book => {
+        return {
+          ...book,
+          id: Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15),
+        };
+      });
+    }
     this.$books.next(books);
     this.verifyAuthors();
+  }
+
+  getBookById(id:string){
+    return this.$books.value.find(book => book.id === id);
   }
 
   loadState(state: State){
