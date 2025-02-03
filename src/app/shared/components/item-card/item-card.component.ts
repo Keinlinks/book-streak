@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input, Renderer2, ViewChild, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, Renderer2, ViewChild, type OnInit } from '@angular/core';
 import { Book } from '../../../../models/book';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { Router, RouterLink } from '@angular/router';
   styleUrl: './item-card.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ItemCardComponent implements OnInit {
+export class ItemCardComponent implements OnInit, OnDestroy {
   router = inject(Router);
   render = inject(Renderer2);
   @Input() item!: Book;
@@ -32,6 +32,9 @@ export class ItemCardComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+  ngOnDestroy(): void {
+    this.unListenAll();
+  }
 
   goToEdit() {
     this.router.navigate(['/add-book/' + this.item.id]);
@@ -61,9 +64,13 @@ export class ItemCardComponent implements OnInit {
 
 
     const endClick = event.timeStamp;
-    const timeDiff = endClick - this.startClickTime;
     let endClickPosition = 0;
+    const timeDiff = endClick - this.startClickTime;
+    if (event instanceof PointerEvent) endClickPosition = event.clientX;
+    else if (event instanceof TouchEvent)
+      endClickPosition = event.changedTouches[0].clientX;
     const xDiff = endClickPosition - this.startClickPosition;
+    console.log(xDiff);
     if (xDiff < -100) {
       this.goToLogs();
       return;
@@ -72,9 +79,7 @@ export class ItemCardComponent implements OnInit {
       this.goToEdit();
       return;
     }
-    if (event instanceof PointerEvent) endClickPosition = event.clientX;
-    else if (event instanceof TouchEvent)
-      endClickPosition = event.changedTouches[0].clientX;
+
 
 
 
