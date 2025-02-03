@@ -4,7 +4,7 @@
 (pointerup)="onPointerUp($event)"
 
 [style]="styles"
-class="flex justify-around gap-4 rounded-2xl bg-blue-600 p-4 relative drag overflow-x-hidden select-none">
+class="flex justify-around gap-4 rounded-2xl bg-blue-600 p-4 relative drag  select-none">
     <div class="h-24 w-20 max-w-20 rounded-2xl relative flex flex-1 justify-center items-center">
       <!-- <img src="{{item.image}}" alt="book cover" class="w-full h-full object-cover"> -->
 
@@ -21,6 +21,9 @@ class="flex justify-around gap-4 rounded-2xl bg-blue-600 p-4 relative drag overf
     </div>
   </div>
   <div class="absolute top-[42%] right-1">
-    <i class="pi pi-arrow-right text-white text-opacity-20"></i>
+    <i class="pi pi-arrow-left text-white text-opacity-20"></i>
+  </div>
+  <div class="absolute top-[42%] left-1">
+    <i class="pi pi-arrow-right text-yellow-300" [ngStyle]="{'opacity': xDiff/1000, 'font-size': (xDiff/100) + 20 + 'px'}"></i>
   </div>
 </div>

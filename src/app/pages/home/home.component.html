@@ -18,12 +18,12 @@
   </div>
 
   <ul class="mt-4 ">
-    @for(book of books; track book.id){
-      <li class="my-2">
-          <book-streak-item-card [item]="book"
-            [styles]="{background: 'linear-gradient(90deg, rgba(29,18,213,1) 0%, rgba(19,19,119,1) 51%, rgba(0,212,255,0.1024860627844888) 100%)'}" />
+      <li class="my-2" *ngFor="let book of books">
+          <book-streak-item-card
+          (progressChange)="showProgressDialog = true;bookProgress = $event"
+          [item]="book"
+          [styles]="{background: 'linear-gradient(90deg, rgba(29,18,213,1) 0%, rgba(19,19,119,1) 51%, rgba(0,212,255,0.1024860627844888) 100%)'}" />
       </li>
-    }
   </ul>
   <nav class="sticky bottom-0 bg-black rounded-md bg-opacity-80 pt-1 w-full">
     <ul class="flex justify-center items-center gap-4 p-4">
@@ -33,3 +33,16 @@
     </ul>
   </nav>
 </section>
+<p-dialog header="Página actual" [modal]="true" [style]="{width: '300px'}" [(visible)]="showProgressDialog">
+  <p-floatlabel>
+    <p-inputnumber #pageProgress id="page" pInputText [(ngModel)]="dialogInput" class="w-full" [allowEmpty]="false" />
+    <label for="page">Página</label>
+  </p-floatlabel>
+  <p>{{dialogErrorMessage}}</p>
+  <div class="flex justify-center">
+    <button class="mt-4" pButton [label]="'Aceptar'" type="button"
+      (click)="addProgress(bookProgress,dialogInput)"
+      [disabled]="dialogInput > bookProgress.totalPage || dialogInput <= bookProgress.progress"
+      ></button>
+  </div>
+</p-dialog>

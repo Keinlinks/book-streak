@@ -101,7 +101,7 @@ export class AddBookFormComponent implements OnInit {
   }
   updateBookSubmit(book:Book){
     let log;
-    if (this.initialState.progress != book.progress) {
+    if (this.initialState.progress < book.progress) {
       log = {
         currentPage: book.progress,
         initialPage: this.initialState.progress,

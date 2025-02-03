@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input, OnDestroy, Renderer2, ViewChild, type OnInit } from '@angular/core';
-import { Book } from '../../../../models/book';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnDestroy, Output, Renderer2, SimpleChanges, ViewChild, type OnInit } from '@angular/core';
+import { Book } from '../../../../../models/book';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { KnobModule } from 'primeng/knob';
 import { ButtonModule } from 'primeng/button';
-import { Router, RouterLink } from '@angular/router';
+import { Router,  } from '@angular/router';
 
 @Component({
   selector: 'book-streak-item-card',
@@ -18,8 +18,10 @@ import { Router, RouterLink } from '@angular/router';
 export class ItemCardComponent implements OnInit, OnDestroy {
   router = inject(Router);
   render = inject(Renderer2);
+  cd = inject(ChangeDetectorRef);
   @Input() item!: Book;
   @Input() styles?: { [key: string]: string };
+  @Output() progressChange = new EventEmitter<Book>();
   @ViewChild('bookCard') bookCard!: any;
   unlistenerPointer!: (() => void) | undefined;
   unlistenerTouch!: (() => void) | undefined;
@@ -42,8 +44,10 @@ export class ItemCardComponent implements OnInit, OnDestroy {
   goToLogs() {
     this.router.navigate(['/logs/' + this.item.id]);
   }
+
   startClickTime = 0;
   startClickPosition = 0;
+  xDiff = 0;
   onPointerDown(event: PointerEvent | TouchEvent) {
     this.unListenAll();
     this.startClickTime = event.timeStamp;
@@ -70,20 +74,21 @@ export class ItemCardComponent implements OnInit, OnDestroy {
     else if (event instanceof TouchEvent)
       endClickPosition = event.changedTouches[0].clientX;
     const xDiff = endClickPosition - this.startClickPosition;
-    console.log(xDiff);
+
     if (xDiff < -100) {
       this.goToLogs();
       return;
     }
-    if (timeDiff < 500) {
+    else if (xDiff > 110){
+      this.progressChange.emit(this.item);
+
+    }
+    else if (timeDiff < 500) {
       this.goToEdit();
       return;
     }
-
-
-
-
     this.startClickTime = 0;
+    this.xDiff = 0;
   }
 
   startPointerDrag(x: number) {
@@ -92,8 +97,8 @@ export class ItemCardComponent implements OnInit, OnDestroy {
       'mousemove',
       (event) => {
         let element = this.bookCard.nativeElement as HTMLElement;
-        if (event.clientX - x < 0)
-          element.style.transform = `translateX(${event.clientX - x}px)`;
+        element.style.transform = `translateX(${event.clientX - x}px)`;
+        this.xDiff = event.clientX - x;
       }
     );
   }
@@ -103,8 +108,10 @@ export class ItemCardComponent implements OnInit, OnDestroy {
       'touchmove',
       (event:TouchEvent) => {
         let element = this.bookCard.nativeElement as HTMLElement;
-        if (event.touches[0].clientX - x < 0)
-          element.style.transform = `translateX(${event.touches[0].clientX - x}px)`;
+        element.style.transform = `translateX(${event.touches[0].clientX - x}px)`;
+        this.xDiff = event.touches[0].clientX - x;
+        this.cd.detectChanges();
+
       }
     );
     this.unListenTouchEnd = this.render.listen('document', 'touchend', (event) => {
