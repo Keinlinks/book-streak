@@ -16,7 +16,7 @@ import { StateService } from 'src/app/services/state.service';
 export class SettingComponent implements OnInit {
   editStreakDialogVisible = false;
   stateService = inject(StateService);
-  version = '1.1.1';
+  version = '1.2.1';
 
   ngOnInit(): void {
 
