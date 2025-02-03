@@ -1,9 +1,15 @@
-<div [style]="styles" class="flex justify-around gap-4 rounded-2xl bg-blue-600 p-4 ">
+<div
+#bookCard
+(pointerdown)="onPointerDown($event)"
+(pointerup)="onPointerUp($event)"
+
+[style]="styles"
+class="flex justify-around gap-4 rounded-2xl bg-blue-600 p-4 relative drag overflow-x-hidden select-none">
     <div class="h-24 w-20 max-w-20 rounded-2xl relative flex flex-1 justify-center items-center">
       <!-- <img src="{{item.image}}" alt="book cover" class="w-full h-full object-cover"> -->
 
       <p-knob [valueColor]="percentage == 100 ? 'green':'purple'" textColor="white" valueTemplate="{value}%" size="100"
-        [(ngModel)]="percentage" [min]="0" [max]="100"></p-knob>
+        [(ngModel)]="percentage" [min]="0" [max]="100" readonly="true"></p-knob>
     </div>
 
   <div class="flex flex-col items-center flex-1">
@@ -11,7 +17,10 @@
     <p class="text-opacity-50 text-white">{{item.author}}</p>
     <p >Progreso: <span>{{item.progress}}</span>/<span class="font-semibold">{{item.totalPage}}</span> paginas</p>
     <div class="mt-2">
-      <p-rating readonly="true" stars="10" [(ngModel)]="item.rating" />
+      <p-rating readonly="true" stars="10" [(ngModel)]="item.rating" [iconOnStyle]="{cursor:'default'}"  [iconOffStyle]="{cursor:'default'}"/>
     </div>
+  </div>
+  <div class="absolute top-[42%] right-1">
+    <i class="pi pi-arrow-right text-white text-opacity-20"></i>
   </div>
 </div>

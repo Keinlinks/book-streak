@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, last, Observable } from "rxjs";
-import { Book } from "../../models/book";
+import { Book, BookLogBase, BookLogProgress, NewBookLog } from "../../models/book";
 import { State } from "src/models/state";
 
 
@@ -44,22 +44,39 @@ export class StateService {
   }
   addNewBook(book: Book){
     const books = this.$books.value;
-    if (book.id){
-      const index = books.findIndex(b => b.id === book.id);
-      books[index] = book;
-    }
-    else {
-      book.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-      books.push(book);
-    }
 
+    book.id = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+    let newBookLog: NewBookLog = {
+      type: 'new',
+      message: 'Se agregó el libro',
+      date: new Date(),
+    };
+
+    book.logs.push(newBookLog);
+
+    books.push(book);
+
+    this.$books.next(books);
+    this.verifyAuthors();
+    this.saveState();
+  }
+  updateBook(book: Book, log?:BookLogBase){
+    const books = this.$books.value;
+    const index = books.findIndex((b) => b.id === book.id);
+    books[index] = book;
+    if (log) book.logs.push(log);
     this.$books.next(books);
     this.verifyAuthors();
     this.saveState();
   }
 
   loadBooks(books: Book[]){
-    let isBooksWithId = books.every(book => book.id !== undefined && book.id !== "");
+    let isBooksWithId = books.every(book => {
+      if (!book.logs) book.logs = [];
+      return book.id !== undefined && book.id !== ""
+    });
+
     if (!isBooksWithId){
       books = books.map(book => {
         return {
@@ -68,6 +85,7 @@ export class StateService {
         };
       });
     }
+
     this.$books.next(books);
     this.verifyAuthors();
   }
@@ -106,5 +124,22 @@ export class StateService {
   }
   getAuthors(){
     return this.$author;
+  }
+
+  setProgressLog(bookId:string,message:string,initialPage:number,currentPage:number){
+    const book = this.$books.value.find(book => book.id === bookId);
+    if (!book) return false;
+    if (!book.logs) book.logs = [];
+    let log:BookLogProgress = {
+      type: 'progress',
+      message,
+      initialPage,
+      currentPage,
+      date: new Date(),
+    }
+    book.logs.push(log);
+    this.saveState();
+    return true;
+
   }
 }

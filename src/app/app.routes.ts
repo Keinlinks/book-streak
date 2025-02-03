@@ -20,6 +20,10 @@ export const routes: Routes = [
         (m) => m.AddBookFormComponent
       ),
   },
+  {
+    path: 'logs/:id',
+    loadComponent: ()=>import('./pages/logs-book/logs-book.component').then(m => m.LogsBookComponent),
+  },
 
   {
     path: 'config',

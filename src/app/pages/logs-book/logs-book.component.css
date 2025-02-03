@@ -1,0 +1,8 @@
+:host {
+  display: block;
+}
+
+.fade-custom{
+background: rgb(0, 0, 0);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.6795168751094187) 0%, rgba(0, 0, 0, 0.4834384437368697) 2%, rgba(0, 0, 0, 1) 16%, rgba(0, 0, 0, 1) 100%);
+}

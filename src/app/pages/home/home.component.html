@@ -20,10 +20,8 @@
   <ul class="mt-4 ">
     @for(book of books; track book.id){
       <li class="my-2">
-        <a [routerLink]="'/add-book' + '/' + book.id">
           <book-streak-item-card [item]="book"
             [styles]="{background: 'linear-gradient(90deg, rgba(29,18,213,1) 0%, rgba(19,19,119,1) 51%, rgba(0,212,255,0.1024860627844888) 100%)'}" />
-        </a>
       </li>
     }
   </ul>
